@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
             saveData()
         }
 
-        spiceList = ArrayList(File("HerbAndSpice.txt").readLines())
+       // spiceList = ArrayList(File("HerbAndSpice.txt").readLines())
 
         Log.w("spice", spiceList.toString())
 
