@@ -18,10 +18,12 @@ import com.google.gson.reflect.TypeToken
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import kotlinx.android.synthetic.main.content_main.*
+import java.io.File
 import java.io.IOException
 import java.net.URL
 
 private var itemlist = arrayListOf<String>()
+private var spiceList = arrayListOf<String>()
 private lateinit var adapter: ArrayAdapter<String>
 
 class MainActivity : AppCompatActivity() {
@@ -73,6 +75,10 @@ class MainActivity : AppCompatActivity() {
             adapter.notifyDataSetChanged()
             saveData()
         }
+
+        spiceList = ArrayList(File("HerbAndSpice.txt").readLines())
+
+        Log.w("spice", spiceList.toString())
 
         loadData()
     }
