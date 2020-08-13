@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "829296389258",
+    "firebase_url": "https://adamsfuntimes.firebaseio.com",
+    "project_id": "adamsfuntimes",
+    "storage_bucket": "adamsfuntimes.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:829296389258:android:19ca8cf13e742ed2099173",
+        "android_client_info": {
+          "package_name": "com.adam.shoppinglist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "829296389258-9cvvfd2d5c6reeigefgq2dhheuf4kve0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAL4uwoC5DKzHhMfqu03LllGhNcXRIK0l0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "829296389258-9cvvfd2d5c6reeigefgq2dhheuf4kve0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
