@@ -11,7 +11,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.EditText
-import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -24,7 +23,6 @@ import com.google.mlkit.vision.text.TextRecognition
 import kotlinx.android.synthetic.main.content_main.*
 import java.io.File
 import java.io.IOException
-import java.io.InputStream
 
 private var itemlist = arrayListOf<String>()
 private var spiceList = arrayListOf<String>()
@@ -85,11 +83,14 @@ class MainActivity : AppCompatActivity() {
                             saveData()
                         }
                         .addOnFailureListener { e ->
-                            // Task failed with an exception
+                            e.printStackTrace()
                         }
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
+                //Remove file
+                val myFile = File(UriString)
+                if (myFile.exists()) myFile.delete()
             }
         }
 
@@ -108,14 +109,13 @@ class MainActivity : AppCompatActivity() {
 
         if (id == R.id.add_item) {
             val alert: AlertDialog.Builder =  AlertDialog.Builder(this)
-            val edittext = EditText(this)
+            val editText = EditText(this)
             alert.setTitle("Add Item To List")
-
-            alert.setView(edittext)
+            alert.setView(editText)
 
             alert.setPositiveButton("Add",
                 DialogInterface.OnClickListener { dialog, whichButton -> //What ever you want to do with the value
-                    itemlist.add(edittext.text.toString())
+                    itemlist.add(editText.text.toString())
                     adapter.notifyDataSetChanged()
                     saveData()
                 })
@@ -173,10 +173,9 @@ class MainActivity : AppCompatActivity() {
 
         Log.w("loading", json!!)
 
-        if (json != null) {
-            itemlist.addAll(gson.fromJson(json, type))
-            adapter.notifyDataSetChanged()
-        }
+        itemlist.addAll(gson.fromJson(json, type))
+        adapter.notifyDataSetChanged()
+
     }
 }
 

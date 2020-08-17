@@ -85,9 +85,9 @@ class CaptureImage : AppCompatActivity() {
                         BuildConfig.APPLICATION_ID + ".provider",
                         photoFile
                     )
-                    val msg = "Photo capture succeeded: $photoURI"
-                    Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-                    Log.d(TAG, msg)
+                   // val msg = "Photo capture succeeded: $photoURI"
+                   // Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+                   // Log.d(TAG, msg)
 
                     //crop
                     CropImage.activity(photoURI)
@@ -101,6 +101,10 @@ class CaptureImage : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             val result: CropImage.ActivityResult = CropImage.getActivityResult(data)
+            val myFile = File(result.originalUri.toString())
+            Log.w("Delete", result.originalUri.toString())
+            myFile.delete()
+
             if (resultCode == Activity.RESULT_OK) {
                 Log.w("crop", result.uri.toString())
                 val data = Intent()
