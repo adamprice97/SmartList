@@ -1,6 +1,7 @@
 package com.adam.shoppinglist
 
 import android.app.Activity
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -9,8 +10,11 @@ import android.util.SparseBooleanArray
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
@@ -20,7 +24,7 @@ import com.google.mlkit.vision.text.TextRecognition
 import kotlinx.android.synthetic.main.content_main.*
 import java.io.File
 import java.io.IOException
-import java.net.URL
+import java.io.InputStream
 
 private var itemlist = arrayListOf<String>()
 private var spiceList = arrayListOf<String>()
@@ -34,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.toolbar))
 
         val fab = findViewById<FloatingActionButton>(R.id.fab)
-        fab.setOnClickListener { view ->
+        fab.setOnClickListener {
             startForResult.launch(Intent(this, CaptureImage::class.java))
         }
 
@@ -45,40 +49,6 @@ class MainActivity : AppCompatActivity() {
         )
 
         listView.adapter = adapter
-
-        // Adding the items
-        add.setOnClickListener {
-            itemlist.add(editText.text.toString())
-            adapter.notifyDataSetChanged()
-            editText.text.clear()
-            saveData()
-        }
-        // Clearing all the items
-        clear.setOnClickListener {
-            itemlist.clear()
-            adapter.notifyDataSetChanged()
-            saveData()
-        }
-
-        // Deleting
-        delete.setOnClickListener {
-            val position: SparseBooleanArray = listView.checkedItemPositions
-            val count = listView.count
-            var item = count - 1
-            while (item >= 0) {
-                if (position.get(item)) {
-                    adapter.remove(itemlist.get(item))
-                }
-                item--
-            }
-            position.clear()
-            adapter.notifyDataSetChanged()
-            saveData()
-        }
-
-       // spiceList = ArrayList(File("HerbAndSpice.txt").readLines())
-
-        Log.w("spice", spiceList.toString())
 
         loadData()
     }
@@ -129,10 +99,59 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
+        // Handle action bar item clicks here.
+        val id = item.itemId
+
+        if (id == R.id.take_picture) {
+            startForResult.launch(Intent(this, CaptureImage::class.java))
         }
+
+        if (id == R.id.add_item) {
+            val alert: AlertDialog.Builder =  AlertDialog.Builder(this)
+            val edittext = EditText(this)
+            alert.setTitle("Add Item To List")
+
+            alert.setView(edittext)
+
+            alert.setPositiveButton("Add",
+                DialogInterface.OnClickListener { dialog, whichButton -> //What ever you want to do with the value
+                    itemlist.add(edittext.text.toString())
+                    adapter.notifyDataSetChanged()
+                    saveData()
+                })
+
+            alert.setNegativeButton("Cancel",
+                DialogInterface.OnClickListener { dialog, whichButton ->
+                })
+
+            alert.show()
+            return true
+        }
+        if (id == R.id.clear_all) {
+            itemlist.clear()
+            adapter.notifyDataSetChanged()
+            saveData()
+            return true
+        }
+
+        if (id == R.id.clear_selected) {
+            val position: SparseBooleanArray = listView.checkedItemPositions
+            val count = listView.count
+            var item = count - 1
+            while (item >= 0) {
+                if (position.get(item)) {
+                    adapter.remove(itemlist.get(item))
+                }
+                item--
+            }
+            position.clear()
+            adapter.notifyDataSetChanged()
+            saveData()
+            return true
+        }
+
+        return super.onOptionsItemSelected(item)
+
     }
 
     private fun saveData() {
